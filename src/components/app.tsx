@@ -1,7 +1,6 @@
 import {FC} from 'react';
+import {Game} from './game';
 
 export const App: FC = () => {
-  return (
-    <h1>Hello World</h1>
-  );
+  return <Game />;
 };
