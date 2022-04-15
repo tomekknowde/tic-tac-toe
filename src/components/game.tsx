@@ -1,15 +1,11 @@
 import React, {FC, useEffect, useState} from 'react';
 import {Board} from './board';
 import {calculateNextValue, calculateStatus, calculateWinner} from '../services/game.service';
+import {useLocalStorageState} from '../hooks/use-local-storage-state';
 
 export const Game: FC = () => {
-  const [squares, setSquares] = useState<string[]>(() =>
-    JSON.parse(localStorage.getItem('squares') || '')
-    || Array(9).fill(''));
 
-  useEffect(() => {
-    localStorage.setItem('squares', JSON.stringify(squares));
-  }, [squares])
+  const [squares, setSquares] = useLocalStorageState<string[]>('squares', Array(9).fill(''));
 
   const winner = calculateWinner(squares);
   const nextValue = calculateNextValue(squares);
