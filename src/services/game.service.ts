@@ -29,3 +29,5 @@ export function calculateWinner(squares: string[]): string | null {
   }
   return null;
 }
+
+export const emptyBoard = Array(9).fill('');
