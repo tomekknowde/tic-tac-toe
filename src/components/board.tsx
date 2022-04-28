@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {Square} from './square';
 import styled from '@emotion/styled';
 
-
-export const BoardRow = styled.div`
-  display: flex;
+export const BoardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 40px);
 `;
 
 interface BoardProps {
@@ -14,16 +13,9 @@ interface BoardProps {
 }
 
 export const Board: FC<BoardProps> = ({squares, selectSquare}) => {
-  const squaresGrid = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
-
   return (
-    <>
-      {squaresGrid.map((row, rowIndex) =>
-        <BoardRow key={rowIndex}>
-          {row.map(squareIndex =>
-            <Square key={squareIndex} value={squares[squareIndex]} onClick={() => selectSquare(squareIndex)}/>)}
-        </BoardRow>
-      )}
-    </>
+    <BoardGrid>
+      {squares.map((square, index) => <Square key={index} value={square} onClick={() => selectSquare(index)}/>)}
+    </BoardGrid>
   );
 };

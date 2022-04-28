@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import styled from '@emotion/styled';
 
-
 const SquareButton = styled.button`
   border: 1px solid black;
   width: 30px;
