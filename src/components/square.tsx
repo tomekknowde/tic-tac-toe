@@ -7,6 +7,7 @@ const SquareButton = styled.button`
   min-height: 30px;
   margin: 3px;
   background: none;
+  cursor: pointer;
 `;
 
 interface SquareProps {
