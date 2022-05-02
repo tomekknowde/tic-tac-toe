@@ -1,32 +1,37 @@
-import React, {FC, useEffect, useState} from 'react';
-import {Board} from './board';
-import {calculateNextValue, calculateStatus, calculateWinner} from '../services/game.service';
-import {useLocalStorageState} from '../hooks/use-local-storage-state';
+import React, { FC } from 'react';
+import { Board } from './board';
+import { calculateNextValue, calculateStatus, calculateWinner, emptyBoard } from '../services/game.service';
+import { useLocalStorageState } from '../hooks/use-local-storage-state';
 
 export const Game: FC = () => {
 
-  const [squares, setSquares] = useLocalStorageState<string[]>('squares', Array(9).fill(''));
+    const {
+        addToSquareHistory,
+        currentSquare,
+        moveBack,
+        moveForward,
+        reset
+    } = useLocalStorageState<string[]>('squares', 'squaresIndex', emptyBoard);
+    const winner = calculateWinner(currentSquare);
+    const nextValue = calculateNextValue(currentSquare);
+    const status = calculateStatus(winner, currentSquare, nextValue);
 
-  const winner = calculateWinner(squares);
-  const nextValue = calculateNextValue(squares);
-  const status = calculateStatus(winner, squares, nextValue);
+    const selectSquare = (index: number) => {
+        if (winner || currentSquare[index]) {
+            return;
+        }
 
-  const selectSquare = (index: number) => {
-    if (winner || squares[index]) {
-      return;
+        const newSquare = currentSquare.map((value: string, squareIndex: number) => index === squareIndex ? nextValue : value)
+        addToSquareHistory(newSquare);
     }
-    setSquares(prevState => prevState.map((square, squareIndex) => index === squareIndex ? nextValue : square));
-  }
 
-  const reset = () => {
-    setSquares(Array(9).fill(''));
-  }
-
-  return (
-    <>
-      <div>{status}</div>
-      <Board squares={squares} selectSquare={(squareIndex) => selectSquare(squareIndex)}/>
-      <button onClick={() => reset()}>Reset</button>
-    </>
-  );
+    return (
+        <>
+            <div>{status}</div>
+            <Board squares={currentSquare} selectSquare={(squareIndex) => selectSquare(squareIndex)}/>
+            <button onClick={() => reset()}>Reset</button>
+            <button onClick={() => !winner && moveBack()}>Undo</button>
+            <button onClick={() => !winner && moveForward()}>Redo</button>
+        </>
+    );
 };
